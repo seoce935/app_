@@ -1,0 +1,96 @@
+1. 가게 데이터 파일 생성
+모든 화면에서 사용할 가게 데이터 구조를 먼저 정의합니다.
+파일 위치: lib/data/store_data.dart 파일을 생성합니다.
+
+1-2. 이미지 준비 (선택 사항)
+assets/ 폴더를 프로젝트 루트에 만들고, food_placeholder.png와 같은 더미 이미지 파일을 넣어주세요.
+pubspec.yaml 파일에 assets: 경로를 활성화해야 합니다.
+
+2. MyPage 화면 구현 코드
+파일 위치: lib/screens/my_screen.dart 파일을 생성합니다.
+
+3. 최근 본 가게 화면 (RecentViewScreen) 구현
+이제 '최근 본' 아이콘을 눌렀을 때 나타나는 화면을 구현합니다. 이 화면은 recentlyViewedStores 리스트를 참조합니다.
+파일 위치: lib/screens/recent_view_screen.dart 파일을 생성합니다.
+
+4. main.dart 파일 연결 및 테스트
+이제 이 MyPage를 앱의 탭바 중 하나로 연결해야 합니다.
+파일 위치: lib/main.dart 파일의 BottomNavigationBar에 MyScreen을 연결합니다. (이전 대화에서 말씀드린 메인 화면 구조를 가정)
+
+// lib/main.dart (전체 탭바 구조)
+import 'package:flutter/material.dart';
+// MyScreen과 다른 탭 화면들을 모두 import 해야 합니다.
+import 'screens/my_screen.dart'; 
+// TODO: 나머지 화면들도 import
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fooday App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
+      home: const MainScreen(),
+    );
+  }
+}
+
+// 최하단 탭바 구조 (MainScreen)
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 4; // 시작 인덱스를 MyScreen (4번째)으로 설정
+
+  // 탭바에 표시될 화면 목록
+  final List<Widget> _screens = [
+    // TODO: 0. HomeScreen(),
+    // TODO: 1. SaveScreen(),
+    // TODO: 2. MapScreen(), (지도 화면은 탭바가 없을 수 있으므로 추후 조정)
+    // TODO: 3. RandomPickScreen(),
+    Container(child: Center(child: Text('홈 화면'))), // 임시
+    Container(child: Center(child: Text('저장 화면'))), // 임시
+    Container(child: Center(child: Text('지도 화면'))), // 임시
+    Container(child: Center(child: Text('랜덤픽 화면'))), // 임시
+    const MyScreen(), // MyScreen 연결
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: '저장'),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: '지도'),
+          BottomNavigationBarItem(icon: Icon(Icons.shuffle), label: '랜덤'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'My'),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.redAccent, // Fooday에 어울리는 색상으로 변경
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed, // 아이템이 4개 이상일 때 색상 유지를 위해
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
