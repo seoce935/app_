@@ -1,0 +1,8 @@
+flutter:
+
+
+  uses-material-design: true
+  assets:
+    - assets/
+
+    이거 넣고 하기
